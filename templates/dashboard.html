@@ -1,0 +1,14 @@
+
+<h2>Welcome {{ user }}</h2>
+
+<form action="/agent" method="POST">
+    <input type="text" name="topic" placeholder="Enter research topic">
+    <button type="submit">Research</button>
+</form>
+
+{% if result %}
+    <h3>AI Report</h3>
+    <pre>{{ result }}</pre>
+{% endif %}
+
+<a href="/logout">Logout</a>

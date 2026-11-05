@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Environment files
+.env
+server/.env
+client/.env
+
+# Build output
+client/dist/
+
+# Python (legacy Flask project)
+__pycache__/
+*.db
+users.db
+
+# OS / editor / IDE
+.DS_Store
+.vscode/
+.kiro/
