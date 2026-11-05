@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 
-import { connectDB } from "./config/db.js";
+import { connectDB, dbError, isDbConnected } from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import guidanceRoutes from "./routes/guidance.js";
 
@@ -26,6 +26,11 @@ app.use("/api/guidance", guidanceRoutes);
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
+// Diagnostics: reports the real DB connection state + last error
+app.get("/api/dbstatus", (req, res) =>
+  res.json({ connected: isDbConnected(), error: dbError })
+);
+
 // 404 for unknown API routes (must come before the SPA catch-all)
 app.use("/api", (req, res) => res.status(404).json({ message: "API route not found" }));
 
@@ -46,6 +51,7 @@ app.use((err, req, res, next) => {
 // Render sets PORT automatically; 5001 avoids the macOS ControlCenter conflict locally.
 const PORT = process.env.PORT || 5001;
 
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-});
+// Start listening immediately; connect DB in the background so a DB outage
+// doesn't block startup or fail the health check.
+connectDB();
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
