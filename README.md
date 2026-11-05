@@ -129,3 +129,23 @@ Ai project/
 
 - The legacy Flask app lives in `app.py` (and `templates/`, `requirements.txt`) for reference and can be removed once you're done migrating.
 - If the AI endpoint returns a 503, make sure Ollama is running and the model is pulled.
+
+
+## Deployment
+
+The app is configured to deploy as a **single free web service** on Render, with
+**MongoDB Atlas** for the database and **Groq** for the AI (local dev still uses
+Ollama — no Groq key needed locally). When deployed, Express serves both the API
+and the built React frontend on one public URL.
+
+See **[DEPLOY.md](./DEPLOY.md)** for the full step-by-step guide (accounts, keys,
+and Render config). A `render.yaml` Blueprint is included for one-click deploys.
+
+Quick deploy summary:
+1. MongoDB Atlas → get `MONGO_URI`
+2. Groq → get `GROQ_API_KEY`
+3. Render → New → Blueprint → pick this repo → paste `MONGO_URI` and `GROQ_API_KEY` → Apply
+4. Open `https://<your-service>.onrender.com`
+
+> The Groq model is configurable via `GROQ_MODEL` (default `openai/gpt-oss-120b`).
+> See https://console.groq.com/docs/models for current model IDs.

@@ -1,0 +1,30 @@
+# Render Blueprint — deploys the app as a single web service
+# (Express serves the API and the built React frontend on one URL)
+# Docs: https://render.com/docs/blueprints
+services:
+  - type: web
+    name: ai-career-guidance
+    env: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Enter these manually in Render after applying the blueprint:
+      - key: MONGO_URI
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      # Auto-generated / fixed:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: OLLAMA_MODEL
+        value: llama3
+      - key: OLLAMA_HOST
+        value: http://127.0.0.1:11434
